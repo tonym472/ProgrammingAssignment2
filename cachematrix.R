@@ -1,34 +1,40 @@
-## Put comments here that give an overall description of what your
-## functions do
 
-## Write a short comment describing this function
+
+## This function creates a special "vector" that sets the inverse of matrix 
+## and gets the inverse of a matrix
 
 makeCacheMatrix <- function(x = matrix()) {
+        ## initialize the value of the matrix inverse to NULL
         m <- NULL
+        ## delcare another function set where the value will be cached. Matrix is created
+        ## for the first time. 
         set <- function(y){
                 x <<- y
                 m <<- NULL
         }
+        ## gets the value of the inverse
         get <- function() x
+        #calculates the inverse of the matrix via the solve function
         setinverse <- function(solve) m <<- solve
         getinverse <- function() m
+        #creates a list of values
         list(set = set, get = get, 
              setinverse = setinverse, 
-             getinverse = getinverse,
-             x = x,
-             m = m)
+             getinverse = getinverse)
 }
 
 
-## Write a short comment describing this function
+# This function is used to get the cache of the matrix
 
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
+        ##if the inverse exists, it returns it.
         m <- x$getinverse()
         if(!is.null(m)){
                 message("getting cached data")
                 return (m)
         }
+        #if the inverse does not exist, it is calculated and then retrieved.
         data <- x$get()
         m <- solve(data, ...)
         x$setinverse(m)
@@ -36,30 +42,3 @@ cacheSolve <- function(x, ...) {
 }
 
 
-a <- matrix(1:4,2,2) 
-> b <- makeCacheMatrix(a)
-> cacheSolve(b)
-[,1] [,2]
-[1,]   -2  1.5
-[2,]    1 -0.5
-> cacheSolve(b)
-getting cached data
-[,1] [,2]
-[1,]   -2  1.5
-[2,]    1 -0.5
-
-
-a <- matrix(1:4,2,2)
-> b <- makeCacheMatrix(a)
-> b$get()
-[,1] [,2]
-[1,]    1    3
-[2,]    2    4
-> cacheSolve(b) # cacheSolve has to run to store the Inversed matrix
-[,1] [,2]
-[1,]   -2  1.5
-[2,]    1 -0.5
-> b$getMatrix()
-[,1] [,2]
-[1,]   -2  1.5
-[2,]    1 -0.5
